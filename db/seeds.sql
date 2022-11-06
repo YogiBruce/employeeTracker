@@ -10,7 +10,7 @@ INSERT INTO role (title, salary, department_id)
 VALUES
 ('Full Stack Developer', 80000, 4),
 ('Software Engineer', 120000, 4),
-('Accountant', 10000, 2), 
+('Accountant', 60000, 2), 
 ('Finanical Analyst', 150000, 2),
 ('Marketing Coordindator', 70000, 3), 
 ('Sales Lead', 90000, 3),
@@ -20,11 +20,11 @@ VALUES
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
-('Mark', 'Miller', 2, null),
-('Devin', 'Anderson', 1, 1),
-('Mary', 'Brown', 4, null),
-('Ashley', 'Jones', 3, 3),
-('Tyler', 'Moore', 6, null),
-('Ana', 'Sanchez', 5, 5),
-('Lewis', 'Allen', 7, null),
-('Katherine', 'Green', 8, 7);
+('Robert', 'Arnold', 2, null),
+('Joseph', 'Maurer', 1, 1),
+('Michael', 'Moss', 4, null),
+('Alli', 'Dodt', 3, 3),
+('Shannon', 'Monahan', 6, null),
+('Carlos', 'Sanchez', 5, 5),
+('Gail', 'Morrison', 7, null),
+('Christopher', 'Dudley', 8, 7);
