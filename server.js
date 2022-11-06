@@ -20,7 +20,7 @@ afterConnection = () => {
     console.log("                                   ")
     console.log("***********************************")
     promptUser();
-}    
+}
 
 //Inquirer prompt for starting
 const promptUser = () => {
@@ -48,65 +48,65 @@ const promptUser = () => {
         }
     ])
 
-    .then((answers) => {
-        const { choices } = answers;
-        
-        if (choices === 'View all departments'){
-            showDepartments();
-        };
-    
-        if (choices === 'View all roles'){
-            showRoles();
-        };
-    
-        if (choices === 'View all employees'){
-            showEmployees();
-        };
-    
-        if (choices === 'Add a department'){
-            addDepartment();
-        };
-    
-        if (choices === 'Add a role'){
-            addRole();
-        };
-    
-        if (choices === 'Add an employee'){
-            addEmployee();
-        };
-    
-        if (choices === 'Update an employee role'){
-            updateEmployee();
-        };
-    
-        if (choices === 'Update an employee manager'){
-            updateManager();
-        };
-    
-        if (choices === 'View employees by department'){
-            employeeDepartment();
-        };
-    
-        if (choices === 'Delete a department'){
-            deleteDepartment();
-        };
-    
-        if (choices === 'Delete a role'){
-            deleteRole();
-        };
-    
-        if (choices === 'Delete an employee'){
-            deleteEmployee();
-        };
-    
-        if (choices === 'View department budgets'){
-            viewBudget();
-        };
-    
-        if (choices === 'No action'){
-            connection.end();
-        };
-    });
+        .then((answers) => {
+            const { choices } = answers;
+
+            if (choices === 'View all departments') {
+                showDepartments();
+            };
+
+            if (choices === 'View all roles') {
+                showRoles();
+            };
+
+            if (choices === 'View all employees') {
+                showEmployees();
+            };
+
+            if (choices === 'Add a department') {
+                addDepartment();
+            };
+
+            if (choices === 'Add a role') {
+                addRole();
+            };
+
+            if (choices === 'Add an employee') {
+                addEmployee();
+            };
+
+            if (choices === 'Update an employee role') {
+                updateEmployee();
+            };
+
+            if (choices === 'Update an employee manager') {
+                updateManager();
+            };
+
+            if (choices === 'View employees by department') {
+                employeeDepartment();
+            };
+
+            if (choices === 'Delete a department') {
+                deleteDepartment();
+            };
+
+            if (choices === 'Delete a role') {
+                deleteRole();
+            };
+
+            if (choices === 'Delete an employee') {
+                deleteEmployee();
+            };
+
+            if (choices === 'View department budgets') {
+                viewBudget();
+            };
+
+            if (choices === 'No action') {
+                connection.end();
+            };
+        });
 };
 
 //Show departments function
@@ -163,15 +163,15 @@ addDepartment = () => {
             }
         }
     ])
-    .then((answer) => {
-        const sql = `INSERT INTO department (name) VALUES (?)`;
-        connection.query(sql, answer.addDept, (err, result ) => {
-            if (err) throw err;
-            console.log ('Added ' + answer.addDept + ' to departments!');
+        .then((answer) => {
+            const sql = `INSERT INTO department (name) VALUES (?)`;
+            connection.query(sql, answer.addDept, (err, result) => {
+                if (err) throw err;
+                console.log('Added ' + answer.addDept + ' to departments!');
 
-            showDepartments();
+                showDepartments();
+            });
         });
-    });
 };
 
 //Add roles
@@ -204,37 +204,126 @@ addRole = () => {
             }
         }
     ])
-    .then((answer) => {
-        const params = [answer.role, answer.salary];
+        .then((answer) => {
+            const params = [answer.role, answer.salary];
 
-        const roleSQL = 'SELECT name, id FROM department';
+            const roleSQL = 'SELECT name, id FROM department';
 
-        connection.query(roleSQL, (err,data) => {
-            if (err) throw err;
+            connection.query(roleSQL, (err, data) => {
+                if (err) throw err;
 
-            const dept = data.map(({name, id}) => ({name: name, value: id}));
+                const dept = data.map(({ name, id }) => ({ name: name, value: id }));
 
-            inquirer.prompt([
-                {
-                    type: 'list',
-                    name: 'dept',
-                    message: 'What department is this role in?',
-                    choices: dept
-                }
-            ])
-            .then (deptChoice => {
-                const dept = deptChoice.dept;
-                params.push(dept);
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'dept',
+                        message: 'What department is this role in?',
+                        choices: dept
+                    }
+                ])
+                    .then(deptChoice => {
+                        const dept = deptChoice.dept;
+                        params.push(dept);
 
-                const sql = 'INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)';
+                        const sql = 'INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)';
 
-                connection.query(sql, params, (err,result) => {
-                    if (err) throw err;
-                    console.log('Added ' + answer.role + ' to roles!');
+                        connection.query(sql, params, (err, result) => {
+                            if (err) throw err;
+                            console.log('Added ' + answer.role + ' to roles!');
 
-                    showRoles();
-                });
+                            showRoles();
+                        });
+                    });
             });
         });
-    });
+};
+
+//Add new employee
+addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: "What is the employee's first name?",
+            validate: addFirst => {
+                if (addFirst) {
+                    return true;
+                } else {
+                    console.log('Please enter first name');
+                    return false;
+                }
+            }
+
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: "What is the employee's last name",
+            validate: addLast => {
+                if (addLast) {
+                    return true;
+                } else {
+                    console.log('Please enter last name');
+                    return false;
+                }
+            }
+
+        }
+    ])
+        .then(answer => {
+            const params = [answer.firstName, answer.lastName]
+
+            const roleSql = 'SELECT role.id, role.title FROM role';
+
+            connection.query(roleSql, (err, data) => {
+                if (err) throw err;
+                const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'role',
+                        message: "What is the employee's role?",
+                        choices: roles
+                    }
+                ])
+                    .then(roleChoice => {
+                        const role = roleChoice.role;
+                        params.push(role);
+
+                        const managerSql = 'SELECT * FROM employee';
+
+                        connection.query(managerSql, (err, data) => {
+                            if (err) throw err;
+
+                            const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+
+                            inquirer.prompt([
+                                {
+                                    type: 'list',
+                                    name: 'manager',
+                                    message: "Who is the employee's manager?",
+                                    choices: managers
+
+                                }
+                            ])
+                                .then(managerChoice => {
+                                    const manager = managerChoice.manager;
+                                    params.push(manager);
+
+                                    const sql = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)';
+
+                                    connection.query(sql, params, (err, result) => {
+                                        if (err) throw err;
+                                        console.log("Employee has been added!");
+
+                                        showEmployees();
+                                    });
+                                });
+                        });
+                    });
+            });
+
+        });
 };
