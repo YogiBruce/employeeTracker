@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS employee_db;
 CREATE DATABASE employee_db;
-USE emloyee_db;
+USE employee_db;
 
 CREATE TABLE department ( 
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -21,7 +21,7 @@ CREATE TABLE employee (
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     role_id INTEGER;
-    INDEX role_ind(role_id),
+    INDEX role_ind (role_id),
     CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE SET NULL,
     manager_id INTEGER,
     INDEX manager_ind (manager_id),

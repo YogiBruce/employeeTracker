@@ -21,7 +21,7 @@ afterConnection = () => {
     console.log("***********************************")
     console.log("                                   ")
     console.log("         EMPLOYEE TRACKER          ")
-    console.log("        by: Robert Arnold          ")
+    console.log("         by: Robert Arnold         ")
     console.log("                                   ")
     console.log("***********************************")
     promptUser();
