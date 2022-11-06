@@ -23,8 +23,8 @@ VALUES
 ('Robert', 'Arnold', 2, null),
 ('Joseph', 'Maurer', 4, 1),
 ('Michael', 'Moss', 7, 1),
-('Alli', 'Dodt', 3, 1),
+('Alli', 'Dodt', 5, 1),
 ('Shannon', 'Monahan', 2, 1),
 ('Carlos', 'Sanchez', 1, 1),
-('Gail', 'Morrison', 5, 1),
+('Gail', 'Morrison', 3, 1),
 ('Christopher', 'Dudley', 6, 1);
