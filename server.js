@@ -1,14 +1,9 @@
-//Import MySQL
-const mysql = require('mysql2');
 //Import inquirer
 const inquirer = require('inquirer');
 //Imort Console Table
 const cTable = require('console.table');
-//Setup dotenv
-require('dotenv').config()
-
-// connection to database
-const connection = require('connection.js')
+// Connection to database
+const connection = require('./connection.js')
 
 connection.connect(err => {
     if (err) throw err;
