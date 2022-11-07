@@ -454,37 +454,6 @@ employeeDepartment = () => {
     });
 };
 
-//Delete a department
-deleteDepartment = () => {
-    const deptSql = 'SELECT * FROM department';
-
-    connection.query(deptSql, (err, data) => {
-        if (err) throw err;
-
-        const dept = data.map(({ name, id }) => ({ name: name, value: id }));
-
-        inquirer.prompt([
-            {
-                type: 'list',
-                name: 'dept',
-                message: "What department do you want to delete?",
-                choices: dept
-            }
-        ])
-        .then (deptChoice => {
-            const dept = deptChoice.dept;
-            const sql = 'DELETE FROM department WHERE id = ?';
-            
-            connection.query(sql, dept, (err, result) => {
-                if (err) throw err;
-                console.log("Department has been deleted");
-
-                showDepartments();
-            });
-        });
-    });
-};
-
 //Delete an employee
 deleteEmployee = () => {
     const employeeSql = 'SELECT * FROM employee';
@@ -514,6 +483,37 @@ deleteEmployee = () => {
                     showEmployees();
                 });
             });
+    });
+};
+
+//Delete a department
+deleteDepartment = () => {
+    const deptSql = 'SELECT * FROM department';
+
+    connection.query(deptSql, (err, data) => {
+        if (err) throw err;
+
+        const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'dept',
+                message: "What department do you want to delete?",
+                choices: dept
+            }
+        ])
+        .then (deptChoice => {
+            const dept = deptChoice.dept;
+            const sql = 'DELETE FROM department WHERE id = ?';
+            
+            connection.query(sql, dept, (err, result) => {
+                if (err) throw err;
+                console.log("Department has been deleted");
+
+                showDepartments();
+            });
+        });
     });
 };
 
