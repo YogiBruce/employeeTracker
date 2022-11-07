@@ -40,6 +40,7 @@ const promptUser = () => {
                 'Update an employee manager',
                 'View employees by department',
                 'Delete an employee',
+                'Delete a department',
                 'View department budgets',
                 'No Action'
             ]
@@ -89,6 +90,10 @@ const promptUser = () => {
                 deleteEmployee();
             };
 
+            if (choices === 'Delete a department') {
+                deleteDepartment();
+            }
+
             if (choices === 'View department budgets') {
                 viewBudget();
             };
@@ -127,7 +132,7 @@ showRoles = () => {
 //Show employees
 showEmployees = () => {
     console.log('Showing all employees...\n');
-    const sql = 'SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS deartment, role.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id';
+    const sql = 'SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id';
 
     connection.query(sql, (err, rows) => {
         if (err) throw err;
@@ -405,7 +410,7 @@ updateManager = () => {
                 connection.query(managerSql, (err, data) => {
                     if (err) throw err;
 
-                    const managers = data.map(({ id, first_name, last_name }) => ({name: first_name + " " + last_name, value: id }));
+                    const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
 
                     inquirer.prompt([
                         {
@@ -449,14 +454,45 @@ employeeDepartment = () => {
     });
 };
 
+//Delete a department
+deleteDepartment = () => {
+    const deptSql = 'SELECT * FROM department';
+
+    connection.query(deptSql, (err, data) => {
+        if (err) throw err;
+
+        const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'dept',
+                message: "What department do you want to delete?",
+                choices: dept
+            }
+        ])
+        .then (deptChoice => {
+            const dept = deptChoice.dept;
+            const sql = 'DELETE FROM department WHERE id = ?';
+            
+            connection.query(sql, dept, (err, result) => {
+                if (err) throw err;
+                console.log("Department has been deleted");
+
+                showDepartments();
+            });
+        });
+    });
+};
+
 //Delete an employee
 deleteEmployee = () => {
     const employeeSql = 'SELECT * FROM employee';
 
-    connection.query(employeeSql, (err,data) => {
+    connection.query(employeeSql, (err, data) => {
         if (err) throw err;
 
-        const employees = data.map(({id, first_name, last_name}) => ({name: first_name + " " + last_name, value: id}));
+        const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
 
         inquirer.prompt([
             {
@@ -466,17 +502,31 @@ deleteEmployee = () => {
                 choices: employees
             }
         ])
-        .then (employeeChoice => {
-            const employee = employeeChoice.name;
+            .then(employeeChoice => {
+                const employee = employeeChoice.name;
 
-            const sql = 'DELETE FROM employee WHERE id = ?';
+                const sql = 'DELETE FROM employee WHERE id = ?';
 
-            connection.query(sql, employee, (err, result) => {
-                if (err) throw err;
-                console.log("Employee has been removed");
+                connection.query(sql, employee, (err, result) => {
+                    if (err) throw err;
+                    console.log("Employee has been removed");
 
-                showEmployees();
+                    showEmployees();
+                });
             });
-        });
+    });
+};
+
+//View department budgets
+viewBudget = () => {
+    console.log('Showing budget by department...\n');
+
+    const sql = 'SELECT department_id AS id, department.name AS department, SUM(salary) AS budget FROM role JOIN department ON role.department_id = department.id GROUP BY department_id';
+
+    connection.query(sql, (err, rows) => {
+        if (err) throw err;
+        console.table(rows);
+
+        promptUser();
     });
 };
