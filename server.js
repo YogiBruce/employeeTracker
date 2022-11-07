@@ -39,10 +39,8 @@ const promptUser = () => {
                 'Update an employee role',
                 'Update an employee manager',
                 'View employees by department',
-                'Delete a department',
-                'Delete a role',
                 'Delete an employee',
-                'View dearment budgets',
+                'View department budgets',
                 'No Action'
             ]
         }
@@ -85,14 +83,6 @@ const promptUser = () => {
 
             if (choices === 'View employees by department') {
                 employeeDepartment();
-            };
-
-            if (choices === 'Delete a department') {
-                deleteDepartment();
-            };
-
-            if (choices === 'Delete a role') {
-                deleteRole();
             };
 
             if (choices === 'Delete an employee') {
@@ -456,5 +446,37 @@ employeeDepartment = () => {
         if (err) throw err;
         console.table(rows);
         promptUser();
+    });
+};
+
+//Delete an employee
+deleteEmployee = () => {
+    const employeeSql = 'SELECT * FROM employee';
+
+    connection.query(employeeSql, (err,data) => {
+        if (err) throw err;
+
+        const employees = data.map(({id, first_name, last_name}) => ({name: first_name + " " + last_name, value: id}));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'name',
+                message: "Which employee would you like to delete?",
+                choices: employees
+            }
+        ])
+        .then (employeeChoice => {
+            const employee = employeeChoice.name;
+
+            const sql = 'DELETE FROM employee WHERE id = ?';
+
+            connection.query(sql, employee, (err, result) => {
+                if (err) throw err;
+                console.log("Employee has been removed");
+
+                showEmployees();
+            });
+        });
     });
 };
