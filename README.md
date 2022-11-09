@@ -25,7 +25,7 @@ User will need to have Node.js and mySQL installed to run application. Clone Yog
 You may clone this repo to begin using application: [GitHub repo](https://github.com/YogiBruce/employeeTracker)
 
 <a id="Screenshot"></a>
-<img src="" width="500px"/>
+<img src="assets\employee-tracker-gif.gif" width="500px"/>
 
 #
 ## Usage
@@ -35,7 +35,7 @@ User will need to run "npm start" or "node index.js" from the command line to be
 ### Screencastify
 <a id="screencastify"></a>
 
-Follow this link to view walk-through video of application: [Google Drive](https://drive.google.com/file/d/1ixX1ak9MWN1BFcTSDHGnR9jtMAaDoZ7K/view?usp=sharing)
+Follow this link to view walk-through video of application: [Google Drive](https://drive.google.com/file/d/1IUN5gQMWFec1_Y1tWvkCjNGf6nmx0L9u/view?usp=share_link)
 
 #
 ## Tests
